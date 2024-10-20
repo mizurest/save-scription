@@ -1,4 +1,6 @@
 <script setup>
+import NetflixLogo from "@/assets/images/netflix.svg";
+
 const props = defineProps({
   text: {
     type: String,
@@ -15,11 +17,12 @@ const props = defineProps({
 
 <template>
   <li
-    class="w-full text-sm font-bold flex items-center h-12 border rounded-md px-3"
+    class="w-full text-sm flex items-center h-12 border rounded-lg px-3"
     :class="{
-      'border-teal-500 text-teal-500': isSelect,
+      'font-bold border-[#000000ee]': isSelect,
     }"
   >
+  <img :src="NetflixLogo" alt="" class="mr-1.5">
     {{ text }}
   </li>
 </template>

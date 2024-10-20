@@ -4,8 +4,8 @@ import { doc, setDoc, collection, query, getDocs, where } from "firebase/firesto
 
 import Service from "~/components/Service.vue";
 
-const inputService = useState("inputService", () => "サービス名");
-const inputPrice = useState("inputPrice", () => 100);
+const inputService = useState("inputService", () => "");
+const inputPrice = useState("inputPrice", () => 0);
 
 const { $db } = useNuxtApp();
 
@@ -45,18 +45,20 @@ const addData = async () => {
 </script>
 
 <template>
-  <main class="flex">
-    <section class="w-1/3 p-6 h-screen border-r border-gray-100">
+  <main class="flex justify-center">
+    <section class="w-1/3 p-8 h-screen border-r border-gray-100">
       <div>
-        <h3 class="text-xl font-bold mb-4">🔥人気のサブスクリプション</h3>
+        <h3 class="text-lg font-bold mb-4">🔥人気のサブスクリプション</h3>
         <ul class="grid grid-cols-3 gap-2.5">
           <Service text="Amazon Prime" :isSelect="false" />
-
+          <Service text="Netflix" :isSelect="true" />
+          <Service text="U-NEXT" :isSelect="false" />
+          <Service text="Hulu" :isSelect="false" />
         </ul>
       </div>
 
       <div class="mt-12 max-w-96">
-        <h3 class="text-xl font-bold mb-4">上記にないサブスクも登録できます！</h3>
+        <h3 class="text-lg font-bold mb-4">上記にないサブスクも登録できます</h3>
         <div class="flex flex-col gap-2.5 mb-5 text-sm">
           <div class="flex items-center">
             <p class="block w-28 flex-shrink-0">サービス名</p>
@@ -80,12 +82,12 @@ const addData = async () => {
             </div>
           </div>
         </div>
-        <button @click="addData" class="border duration-200 hover:bg-teal-50 border-teal-500 text-teal-500 w-full h-10 rounded-lg font-bold">登録する</button>
+        <button @click="addData" class="border duration-200 hover:bg-teal-50 border-teal-500 text-teal-500 w-full h-10 rounded-lg">登録する</button>
       </div>
     </section>
 
-    <section class="w-1/3 p-6 h-screen">
-      <h3 class="text-xl font-bold mb-3">プランを選択する</h3>
+    <section class="w-1/3 p-8 h-screen">
+      <h3 class="text-lg font-bold mb-3">プランを選択する</h3>
     </section>
   </main>
 </template>
