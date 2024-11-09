@@ -52,6 +52,9 @@ import { useNuxtApp } from "#app";
 import { doc, setDoc, collection, query, getDocs, where } from "firebase/firestore";
 import { ref, watch } from "vue";
 
+const { $db } = useNuxtApp();
+const { $supabase } = useNuxtApp();
+
 import Service from "~/components/Service.vue";
 
 import NetflixLogo from "@/assets/images/netflix.svg";
@@ -60,20 +63,6 @@ import UnextLogo from "@/assets/images/unext.svg";
 import HuluLogo from "@/assets/images/hulu.svg";
 
 const selectedPlan = ref("");
-
-const { $db } = useNuxtApp();
-const plansRef = collection($db, "plans");
-const q = query(plansRef, where("isCustom", "==", false));
-
-getDocs(q)
-  .then((querySnapshot) => {
-    querySnapshot.forEach((doc) => {
-      console.log(doc.id, " => ", doc.data());
-    });
-  })
-  .catch((error) => {
-    console.log("Error getting documents: ", error);
-  });
 
 const addData = async () => {
   try {
@@ -92,4 +81,16 @@ const addData = async () => {
     console.error("エラーメッセージ:", error.message);
   }
 };
+
+const fetchServices = async () => {
+  const { data, error } = await $supabase.from('services').select('*');
+  
+  if (error) {
+    console.error('Error fetching services:', error);
+  } else {
+    console.log('Services data:', data);
+  }
+};
+
+fetchServices();
 </script>
