@@ -1,5 +1,6 @@
 <template>
   <main class="flex justify-center">
+    <img :src="logo" alt="" class="absolute left-5 top-5 w-32" />
     <section class="w-1/3 p-8 h-screen border-r border-gray-200">
       <div>
         <TabMenu />
@@ -41,7 +42,7 @@
             class="w-full border border-gray-200 px-3 h-10 rounded-lg outline-blue-800 placeholder-gray-300"
           />
         </div>
-        <PrimaryButton :isDisabled="submitBtnDisabled" :onClick="addData">登録する</PrimaryButton>
+        <PrimaryButton :isDisabled="false" :onClick="addData">登録する</PrimaryButton>
       </div>
     </section>
   </main>
@@ -53,13 +54,14 @@ import { ref, onMounted } from "vue";
 
 import Service from "~/components/Service.vue";
 import selectImg from "@/assets/images/undraw_click_here_re_y6uq.svg";
+import logo from "@/assets/images/logo.svg";
 
 const { $supabase } = useNuxtApp();
 
 const selectedPlan = ref("");
 const services = ref([]);
+const plans = ref([]);
 const selectServiceId = ref(0);
-const submitBtnDisabled = ref(true);
 
 const fetchServices = async () => {
   const { data, error } = await $supabase.from("services").select("*");
@@ -71,12 +73,20 @@ const fetchServices = async () => {
   }
 };
 
-const addData = () => {
-  if (submitBtnDisabled) return; // ボタンがdisabledの時は何もしない
-
-};
+const addData = () => {};
 
 onMounted(() => {
   fetchServices();
+});
+
+watch(selectServiceId, async (newServiceId) => {
+  const { data, error } = await $supabase.from("plans").select("*").eq("service_id", newServiceId);
+  console.log(data);
+
+  if (error) {
+    console.error("プラン情報の取得に失敗しました:", error);
+  } else {
+    plans.value = data;
+  }
 });
 </script>

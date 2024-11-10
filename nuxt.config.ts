@@ -1,14 +1,17 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   css: ["@/assets/css/tailwind.css"],
+
   postcss: {
     plugins: {
       tailwindcss: {},
       autoprefixer: {},
     },
   },
+
   compatibilityDate: "2024-04-03",
   devtools: { enabled: true },
+
   runtimeConfig: {
     public: {
       FIREBASE_API_KEY: process.env.NUXT_PUBLIC_FIREBASE_API_KEY,
@@ -22,4 +25,6 @@ export default defineNuxtConfig({
       supabaseKey: process.env.NUXT_PUBLIC_SUPABASE_KEY,
     },
   },
+
+  modules: ["@nuxt/image"],
 });

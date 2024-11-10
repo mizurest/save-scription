@@ -1,14 +1,18 @@
 <template>
-  <button @click="onClick" class="text-sm duration-200 bg-blue-800 text-white w-full h-10 rounded-lg" :class="{ 'bg-blue-100 cursor-not-allowed' : isDisabled }">
+  <button
+    @click="onClick"
+    class="text-sm duration-200 text-white w-full h-10 rounded-lg"
+    :class="{ 'bg-blue-100 cursor-not-allowed': isDisabled, 'bg-blue-800 cursor-pointer': !isDisabled }"
+  >
     <slot></slot>
   </button>
 </template>
 
 <script setup>
-import { defineProps } from 'vue';
+import { defineProps } from "vue";
 
 const props = defineProps({
   isDisabled: Boolean,
-  onClick: Function
+  onClick: Function,
 });
 </script>
