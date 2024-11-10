@@ -3,7 +3,7 @@
     :for="id"
     class="block border border-gray-200 p-3.5 rounded-lg"
     :class="{
-      'border-teal-500': isSelected,
+      'border-blue-800': isSelected,
       'border-gray-200 cursor-pointer hover:bg-neutral-50 duration-200': !isSelected,
     }"
     @click="debug"
@@ -12,7 +12,7 @@
       class="flex justify-between items-center"
       :class="{
         'font-bold text-neutral-800': isSelected,
-        'text-neutral-600': !isSelected,
+        'text-gray-600': !isSelected,
       }"
     >
       {{ label }}
@@ -27,7 +27,7 @@
       <span
         class="w-5 h-5 appearance-none border border-gray-200 rounded-full flex items-center justify-center"
         :class="{
-          'bg-teal-500 border-teal-500': isSelected,
+          'bg-blue-800 border-blue-800': isSelected,
           'border-gray-200': !isSelected,
         }"
       >
@@ -51,8 +51,4 @@ const props = defineProps({
   priceText: String,
   isSelected: Boolean,
 });
-
-const debug = () => {
-  console.log()
-}
 </script>
