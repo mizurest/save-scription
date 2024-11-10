@@ -4,7 +4,7 @@
     class="block border border-gray-200 p-3.5 rounded-lg"
     :class="{
       'border-teal-500': isSelected,
-      'border-gray-200 cursor-pointer': !isSelected,
+      'border-gray-200 cursor-pointer hover:bg-neutral-50 duration-200': !isSelected,
     }"
     @click="debug"
   >

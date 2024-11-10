@@ -9,11 +9,8 @@
           <li class="py-3 text-gray-400 cursor-pointer">本</li>
           <li class="py-3 text-gray-400 cursor-pointer">その他</li>
         </ul>
-        <ul class="grid grid-cols-3 gap-2.5 mt-5" v-if="selectedPlan === '年間プラン'">
-          <Service text="Amazon Prime" :isSelect="false" :logo="AmazonPrimeLogo" />
-          <Service text="Netflix" :isSelect="true" :logo="NetflixLogo" />
-          <Service text="U-NEXT" :isSelect="false" :logo="UnextLogo" />
-          <Service text="Hulu" :isSelect="false" :logo="HuluLogo" />
+        <ul class="grid grid-cols-3 gap-2.5 mt-5">
+          <Service :text="s.service_name" :isSelect="selectServiceId === s.id" :logo="s.icon_name" v-for="s in services" :key="s.id" @click="selectServiceId = s.id" />
         </ul>
       </div>
     </section>
@@ -49,48 +46,28 @@
 
 <script setup>
 import { useNuxtApp } from "#app";
-import { doc, setDoc, collection, query, getDocs, where } from "firebase/firestore";
-import { ref, watch } from "vue";
+import { ref, onMounted } from "vue";
+
+import Service from "~/components/Service.vue";
 
 const { $db } = useNuxtApp();
 const { $supabase } = useNuxtApp();
 
-import Service from "~/components/Service.vue";
-
-import NetflixLogo from "@/assets/images/netflix.svg";
-import AmazonPrimeLogo from "@/assets/images/amazon-prime.svg";
-import UnextLogo from "@/assets/images/unext.svg";
-import HuluLogo from "@/assets/images/hulu.svg";
-
 const selectedPlan = ref("");
-
-const addData = async () => {
-  try {
-    const docRef = doc($db, "users", "test3");
-
-    await setDoc(docRef, {
-      service: "Netflix",
-      plan: "",
-      price: 890,
-      isCustom: true,
-    });
-
-    console.log("ドキュメントが作成されました。ID:", docRef.id);
-  } catch (error) {
-    console.error("ドキュメントの追加中にエラーが発生しました:", error.code);
-    console.error("エラーメッセージ:", error.message);
-  }
-};
+const services = ref([]);
+const selectServiceId = ref(0);
 
 const fetchServices = async () => {
-  const { data, error } = await $supabase.from('services').select('*');
-  
+  const { data, error } = await $supabase.from("services").select("*");
+
   if (error) {
-    console.error('Error fetching services:', error);
+    console.error("サービスの取得に失敗しました:", error);
   } else {
-    console.log('Services data:', data);
+    services.value = data;
   }
 };
 
-fetchServices();
+onMounted(() => {
+  fetchServices();
+});
 </script>
