@@ -13,9 +13,9 @@
       <h3 class="text-lg font-bold mb-1">プランの選択</h3>
       <p class="text-gray-400 text-xs mb-3">加入しているプランを選択してください</p>
 
-      <div class="flex flex-col gap-3 justify-center items-center py-16" v-if="selectServiceId == 0">
+      <div class="flex flex-col gap-3 justify-center items-center py-14 rounded-xl" v-if="selectServiceId == 0">
         <img :src="selectImg" alt="select image" class="w-40" />
-        <span class="text-sm text-gray-500">サービスを選択するとプランが表示されます</span>
+        <span class="text-sm text-gray-400">サービスを選択するとプランが表示されます</span>
       </div>
 
       <div class="flex flex-col gap-2.5 mb-8" v-if="selectServiceId !== 0">
@@ -41,7 +41,7 @@
             class="w-full border border-gray-200 px-3 h-10 rounded-lg outline-blue-800 placeholder-gray-300"
           />
         </div>
-        <button @click="addData" class="text-sm duration-200 bg-blue-800 text-white w-full h-10 rounded-lg">登録する</button>
+        <PrimaryButton :isDisabled="submitBtnDisabled" :onClick="addData">登録する</PrimaryButton>
       </div>
     </section>
   </main>
@@ -54,12 +54,12 @@ import { ref, onMounted } from "vue";
 import Service from "~/components/Service.vue";
 import selectImg from "@/assets/images/undraw_click_here_re_y6uq.svg";
 
-const { $db } = useNuxtApp();
 const { $supabase } = useNuxtApp();
 
 const selectedPlan = ref("");
 const services = ref([]);
 const selectServiceId = ref(0);
+const submitBtnDisabled = ref(true);
 
 const fetchServices = async () => {
   const { data, error } = await $supabase.from("services").select("*");
@@ -71,7 +71,10 @@ const fetchServices = async () => {
   }
 };
 
-const addData = () => {};
+const addData = () => {
+  if (submitBtnDisabled) return; // ボタンがdisabledの時は何もしない
+
+};
 
 onMounted(() => {
   fetchServices();
