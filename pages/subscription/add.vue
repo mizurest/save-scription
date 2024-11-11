@@ -3,7 +3,7 @@
     <img :src="logo" alt="" class="absolute left-5 top-5 w-32" />
     <section class="w-1/3 p-8 h-screen">
       <div>
-        <TabMenu />
+        <TabMenu :tabNames="tabNames" v-model:selectedTabId="selectedTabId" />
         <ul class="grid grid-cols-3 gap-2.5 mt-5">
           <Service
             :text="s.service_name"
@@ -48,11 +48,11 @@
 
       <div v-if="selectServiceId !== 0">
         <div class="w-48 text-sm mb-3">
-          <p class="block w-28 flex-shrink-0 text-gray-600 mb-1">利用開始日</p>
+          <p class="block w-28 flex-shrink-0 text-gray-500 mb-1">利用開始日</p>
           <input type="date" name="service" id="" :value="new Date().toISOString().split('T')[0]" class="w-full border border-gray-200 px-3 h-10 rounded-lg outline-blue-800 placeholder-gray-300" />
         </div>
         <div class="text-sm mb-8 h-auto">
-          <p class="flex items-center gap-1 text-gray-600 mb-1">
+          <p class="flex items-center gap-1 text-gray-500 mb-1">
             退会用URL
             <span class="text-xs bg-gray-300 text-white rounded-full px-2 py-1">任意</span>
           </p>
@@ -83,9 +83,28 @@ const { $supabase } = useNuxtApp();
 const selectedPlan = ref("");
 const services = ref([]);
 const plans = ref([]);
+const tabNames = ref([]);
+const selectedTabId = ref(0);
 const selectServiceId = ref(0);
 const isLoadingServices = ref(true);
 const isLoadingPlans = ref(true);
+
+const fetchCategories = async () => {
+  const { data, error } = await $supabase.from("categories").select("*");
+
+  if (error) {
+    console.error("カテゴリの取得に失敗しました:", error);
+  } else {
+    tabNames.value = data.map((item) => ({
+      id: item.id,
+      category_name: item.category_name,
+    }));
+    tabNames.value.unshift({
+      id: 0, // DB上にはないがすべてのidは0
+      category_name: "すべて",
+    });
+  }
+};
 
 const fetchServices = async () => {
   const { data, error } = await $supabase.from("services").select("*");
@@ -100,10 +119,6 @@ const fetchServices = async () => {
 
 const addData = () => {};
 
-onMounted(() => {
-  fetchServices();
-});
-
 watch(selectServiceId, async (newServiceId) => {
   isLoadingPlans.value = true;
   const { data, error } = await $supabase.from("plans").select("*").eq("service_id", newServiceId);
@@ -114,5 +129,10 @@ watch(selectServiceId, async (newServiceId) => {
     plans.value = data;
     isLoadingPlans.value = false;
   }
+});
+
+onMounted(() => {
+  fetchCategories();
+  fetchServices();
 });
 </script>
