@@ -40,6 +40,7 @@
           :isLoading="false"
           :priceText="`￥${p.price.toLocaleString()} / ${p.isMonthly ? '月' : '年'}`"
           v-for="p in plans"
+          v-if="!isLoadingPlans"
           :key="p.id"
         />
         <PlanRadioButton id="" label="" name="plan" value="" :isLoading="true" v-for="n in 2" :key="n" v-if="isLoadingPlans" />
