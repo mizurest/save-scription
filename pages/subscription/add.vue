@@ -3,7 +3,7 @@
     <img :src="logo" alt="" class="absolute left-5 top-5 w-32" />
     <section class="w-1/3 p-8 h-screen">
       <div>
-        <TabMenu :tabNames="tabNames" v-model:selectedTabId="selectedTabId" />
+        <TabMenu :tabs="tabs" v-model:selectedTabId="selectedTabId" />
         <ul class="grid grid-cols-3 gap-2.5 mt-5">
           <Service
             :text="s.service_name"
@@ -83,7 +83,7 @@ const { $supabase } = useNuxtApp();
 const selectedPlan = ref("");
 const services = ref([]);
 const plans = ref([]);
-const tabNames = ref([]);
+const tabs = ref([]);
 const selectedTabId = ref(0);
 const selectServiceId = ref(0);
 const isLoadingServices = ref(true);
@@ -95,11 +95,11 @@ const fetchCategories = async () => {
   if (error) {
     console.error("カテゴリの取得に失敗しました:", error);
   } else {
-    tabNames.value = data.map((item) => ({
+    tabs.value = data.map((item) => ({
       id: item.id,
       category_name: item.category_name,
     }));
-    tabNames.value.unshift({
+    tabs.value.unshift({
       id: 0, // DB上にはないがすべてのidは0
       category_name: "すべて",
     });

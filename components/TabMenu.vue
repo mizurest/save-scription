@@ -3,23 +3,18 @@
     <li
       class="py-3"
       :class="{ 'border-b-2 border-black font-bold': i === selectedTabId, 'text-gray-400 cursor-pointer': i !== selectedTabId }"
-      v-for="(item, i) in tabNames"
+      v-for="(item, i) in tabs"
       @click="emit('update:selectedTabId', i);"
       :key="i"
     >
-      {{ tabNames[i].category_name }}
+      {{ tabs[i].category_name }}
     </li>
   </ul>
 </template>
 
 <script setup>
 const props = defineProps({
-  tabNames: {
-    type: Array,
-    required: true,
-    default: [],
-  },
-  tabIds: {
+  tabs: {
     type: Array,
     required: true,
     default: [],
