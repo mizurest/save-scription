@@ -20,8 +20,17 @@
       </div>
 
       <div class="flex flex-col gap-2.5 mb-8" v-if="selectServiceId !== 0">
-        <PlanRadioButton id="plan1" label="年間プラン" name="plan" value="年間プラン" v-model="selectedPlan" :isSelected="selectedPlan === '年間プラン'" priceText="￥5,900 / 年" />
-        <PlanRadioButton id="plan2" label="月間プラン" name="plan" value="月間プラン" v-model="selectedPlan" :isSelected="selectedPlan === '月間プラン'" priceText="￥600 / 月" />
+        <PlanRadioButton
+          :id="'plan'+p.id"
+          :label="p.plan_name"
+          name="plan"
+          :value="p.plan_name"
+          v-model="selectedPlan"
+          :isSelected="selectedPlan === p.plan_name"
+          :priceText="`￥${p.price.toLocaleString()} / ${p.isMonthly ? '月' : '年'}`"
+          v-for="p in plans"
+          :key="p.id"
+        />
       </div>
 
       <div v-if="selectServiceId !== 0">
@@ -81,7 +90,6 @@ onMounted(() => {
 
 watch(selectServiceId, async (newServiceId) => {
   const { data, error } = await $supabase.from("plans").select("*").eq("service_id", newServiceId);
-  console.log(data);
 
   if (error) {
     console.error("プラン情報の取得に失敗しました:", error);
