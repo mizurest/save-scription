@@ -5,7 +5,17 @@
       <div>
         <TabMenu />
         <ul class="grid grid-cols-3 gap-2.5 mt-5">
-          <Service :text="s.service_name" :isSelect="selectServiceId === s.id" :logo="s.icon_name" v-for="s in services" :key="s.id" @click="selectServiceId = s.id" />
+          <Service
+            :text="s.service_name"
+            :isLoading="false"
+            :isSelect="selectServiceId === s.id"
+            :logo="s.icon_name"
+            v-for="s in services"
+            :key="s.id"
+            @click="selectServiceId = s.id"
+            v-if="!isLoadingServices"
+          />
+          <Service text="" :isLoading="true" :isSelected="false" v-if="isLoadingServices" v-for="n in 6" :key="n" />
         </ul>
       </div>
     </section>
@@ -27,10 +37,12 @@
           :value="p.plan_name"
           v-model="selectedPlan"
           :isSelected="selectedPlan === p.plan_name"
+          :isLoading="false"
           :priceText="`￥${p.price.toLocaleString()} / ${p.isMonthly ? '月' : '年'}`"
           v-for="p in plans"
           :key="p.id"
         />
+        <PlanRadioButton id="" label="" name="plan" value="" :isLoading="true" v-for="n in 2" :key="n" v-if="isLoadingPlans" />
       </div>
 
       <div v-if="selectServiceId !== 0">
@@ -71,6 +83,8 @@ const selectedPlan = ref("");
 const services = ref([]);
 const plans = ref([]);
 const selectServiceId = ref(0);
+const isLoadingServices = ref(true);
+const isLoadingPlans = ref(true);
 
 const fetchServices = async () => {
   const { data, error } = await $supabase.from("services").select("*");
@@ -80,6 +94,7 @@ const fetchServices = async () => {
   } else {
     services.value = data;
   }
+  isLoadingServices.value = false;
 };
 
 const addData = () => {};
@@ -89,12 +104,14 @@ onMounted(() => {
 });
 
 watch(selectServiceId, async (newServiceId) => {
+  isLoadingPlans.value = true;
   const { data, error } = await $supabase.from("plans").select("*").eq("service_id", newServiceId);
 
   if (error) {
     console.error("プラン情報の取得に失敗しました:", error);
   } else {
     plans.value = data;
+    isLoadingPlans.value = false;
   }
 });
 </script>

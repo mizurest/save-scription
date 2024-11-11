@@ -4,26 +4,20 @@
     class="block border border-gray-200 p-3.5 rounded-lg"
     :class="{
       'border-blue-800': isSelected,
-      'border-gray-200 cursor-pointer hover:bg-neutral-50 duration-200': !isSelected,
+      'border-gray-200 cursor-pointer hover:bg-neutral-50 duration-200': !isSelected && !isLoading,
     }"
-    @click="debug"
   >
-    <p
+    <div
       class="flex justify-between items-center"
       :class="{
         'font-bold text-neutral-800': isSelected,
         'text-gray-600': !isSelected,
       }"
     >
-      {{ label }}
-      <input
-        type="radio"
-        :name="name"
-        :id="id"
-        class="hidden"
-        :value="value"
-        @change="$emit('update:modelValue', value)"
-      />
+      <p v-if="!isLoading">{{ label }}</p>
+      <div class="ml-1 animate-pulse h-3 w-1/2 my-1.5 bg-gray-100 rounded" v-if="isLoading"></div>
+      
+      <input type="radio" :name="name" :id="id" class="hidden" :value="value" @change="$emit('update:modelValue', value)" />
       <span
         class="w-5 h-5 appearance-none border border-gray-200 rounded-full flex items-center justify-center"
         :class="{
@@ -33,13 +27,15 @@
       >
         <img :src="checkIcon" alt="checkIcon" class="w-5 h-5" />
       </span>
-    </p>
-    <p class="text-sm mt-0.5">{{ priceText }}</p>
+    </div>
+
+    <p class="text-sm mt-0.5" v-if="!isLoading">{{ priceText }}</p>
+    <div class="ml-1 animate-pulse h-2.5 w-1/4 my-1.5 bg-gray-100 rounded" v-if="isLoading"></div>
   </label>
 </template>
 
 <script setup>
-import { defineProps } from 'vue';
+import { defineProps } from "vue";
 import checkIcon from "@/assets/images/check.svg";
 
 const props = defineProps({
@@ -50,5 +46,6 @@ const props = defineProps({
   modelValue: String,
   priceText: String,
   isSelected: Boolean,
+  isLoading: Boolean,
 });
 </script>
