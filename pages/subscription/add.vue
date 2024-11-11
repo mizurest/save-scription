@@ -1,7 +1,7 @@
 <template>
   <main class="flex justify-center">
     <img :src="logo" alt="" class="absolute left-5 top-5 w-32" />
-    <section class="w-1/3 p-8 h-screen border-r border-gray-200">
+    <section class="w-1/3 p-8 h-screen">
       <div>
         <TabMenu />
         <ul class="grid grid-cols-3 gap-2.5 mt-5">
@@ -21,7 +21,7 @@
 
       <div class="flex flex-col gap-2.5 mb-8" v-if="selectServiceId !== 0">
         <PlanRadioButton
-          :id="'plan'+p.id"
+          :id="'plan' + p.id"
           :label="p.plan_name"
           name="plan"
           :value="p.plan_name"
@@ -36,7 +36,7 @@
       <div v-if="selectServiceId !== 0">
         <div class="w-48 text-sm mb-3">
           <p class="block w-28 flex-shrink-0 text-gray-600 mb-1">利用開始日</p>
-          <input type="date" name="service" id="" value="2024-11-05" class="w-full border border-gray-200 px-3 h-10 rounded-lg outline-blue-800 placeholder-gray-300" />
+          <input type="date" name="service" id="" :value="new Date().toISOString().split('T')[0]" class="w-full border border-gray-200 px-3 h-10 rounded-lg outline-blue-800 placeholder-gray-300" />
         </div>
         <div class="text-sm mb-8 h-auto">
           <p class="flex items-center gap-1 text-gray-600 mb-1">
