@@ -4,7 +4,7 @@
     <section class="w-1/3 p-8 h-screen">
       <div>
         <TabMenu :tabs="tabs" v-model:selectedTabId="selectedTabId" />
-        <ul class="grid grid-cols-3 gap-2.5 mt-5">
+        <ul class="grid grid-cols-2 2xl:grid-cols-3 gap-2.5 mt-5">
           <Service
             :text="s.service_name"
             :isLoading="false"
@@ -106,6 +106,16 @@ const fetchCategories = async () => {
   }
 };
 
+const fetchServiceCategories = async () => {
+  const { data, error } = await $supabase.from("service_categories").select("*");
+
+  if (error) {
+    console.error("サービスカテゴリの取得に失敗しました:", error);
+  } else {
+    console.log(data)
+  }
+};
+
 const fetchServices = async () => {
   const { data, error } = await $supabase.from("services").select("*");
 
@@ -116,8 +126,6 @@ const fetchServices = async () => {
   }
   isLoadingServices.value = false;
 };
-
-const addData = () => {};
 
 watch(selectServiceId, async (newServiceId) => {
   isLoadingPlans.value = true;
@@ -131,8 +139,9 @@ watch(selectServiceId, async (newServiceId) => {
   }
 });
 
-onMounted(() => {
-  fetchCategories();
-  fetchServices();
-});
+fetchCategories();
+fetchServiceCategories();
+fetchServices();
+
+const addData = () => {};
 </script>
