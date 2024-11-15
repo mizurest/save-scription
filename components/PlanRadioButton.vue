@@ -1,7 +1,7 @@
 <template>
   <label
     :for="id"
-    class="block border border-gray-200 p-3.5 rounded-lg"
+    class="block border p-3.5 rounded-lg"
     :class="{
       'border-blue-800 text-neutral-800': isSelected,
       'border-gray-200 cursor-pointer hover:bg-neutral-50 duration-200 text-gray-600': !isSelected && !isLoading,
