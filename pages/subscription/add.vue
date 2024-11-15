@@ -1,70 +1,79 @@
 <template>
-  <main class="flex justify-center">
-    <img :src="logo" alt="サブカン" class="absolute left-5 top-5 w-32" />
-    <section class="w-1/3 p-8 h-screen">
-      <div>
-        <TabMenu :tabs="tabs" v-model:selectedTabId="selectedTabId" />
-        <ul class="grid grid-cols-2 2xl:grid-cols-3 gap-2.5 mt-5">
-          <Service
-            v-for="s in selectedServices"
-            :text="s.service_name"
-            :isLoading="false"
-            :isSelect="selectServiceId === s.id"
-            :logo="s.icon_name"
-            :key="s.id"
-            @click="selectServiceId = s.id"
-            v-if="!isLoadingServices"
-          />
-          <Service text="" :isLoading="true" :isSelected="false" v-if="isLoadingServices" v-for="n in 6" :key="n" />
-        </ul>
-      </div>
+  <main class="flex justify-center w-full">
+    <section class="w-96 h-screen px-5 py-10 bg-white drop-shadow-lg">
+      <img :src="logo" alt="サブカン" class="w-36" />
+      <ul class="flex flex-col gap-1.5 mt-10 text-sm">
+        <li class="px-4 w-full h-12 rounded-lg flex items-center bg-blue-50 text-blue-800 font-bold">サブスクの管理</li>
+        <li class="px-4 w-full h-12 rounded-lg flex items-center hover:bg-gray-50 duration-200 cursor-pointer">分析</li>
+      </ul>
     </section>
 
-    <section class="w-1/3 p-8 h-screen">
-      <h3 class="text-lg font-bold mb-1">プランの選択</h3>
-      <p class="text-gray-400 text-xs mb-3">加入しているプランを選択してください</p>
-
-      <div class="flex flex-col gap-3 justify-center items-center py-14 rounded-xl" v-if="selectServiceId == 0">
-        <img :src="selectImg" alt="select image" class="w-40" />
-        <span class="text-sm text-gray-400">サービスを選択するとプランが表示されます</span>
-      </div>
-
-      <div class="flex flex-col gap-2.5 mb-8" v-if="selectServiceId !== 0">
-        <PlanRadioButton
-          :id="'plan' + p.id"
-          :label="p.plan_name"
-          name="plan"
-          :value="p.plan_name"
-          v-model="selectedPlan"
-          :isSelected="selectedPlan === p.plan_name"
-          :isLoading="false"
-          :priceText="`￥${p.price.toLocaleString()} / ${p.isMonthly ? '月' : '年'}`"
-          v-for="p in plans"
-          v-if="!isLoadingPlans"
-          :key="p.id"
-        />
-        <PlanRadioButton id="" label="" name="plan" value="" :isLoading="true" v-for="n in 2" :key="n" v-if="isLoadingPlans" />
-      </div>
-
-      <div v-if="selectServiceId !== 0">
-        <div class="w-48 text-sm mb-3">
-          <p class="block w-28 flex-shrink-0 text-gray-500 mb-1">利用開始日</p>
-          <input type="date" name="service" id="" :value="new Date().toISOString().split('T')[0]" class="w-full border border-gray-200 px-3 h-10 rounded-lg outline-blue-800 placeholder-gray-300" />
+    <section class="flex gap-24 w-full px-24 py-8">
+      <div class="w-1/2 h-screen">
+        <div>
+          <TabMenu :tabs="tabs" v-model:selectedTabId="selectedTabId" />
+          <ul class="grid grid-cols-2 2xl:grid-cols-3 gap-2.5 mt-5">
+            <Service
+              v-for="s in selectedServices"
+              :text="s.service_name"
+              :isLoading="false"
+              :isSelect="selectServiceId === s.id"
+              :logo="s.icon_name"
+              :key="s.id"
+              @click="selectServiceId = s.id"
+              v-if="!isLoadingServices"
+            />
+            <Service text="" :isLoading="true" :isSelected="false" v-if="isLoadingServices" v-for="n in 6" :key="n" />
+          </ul>
         </div>
-        <div class="text-sm mb-8 h-auto">
-          <p class="flex items-center gap-1 text-gray-500 mb-1">
-            退会用URL
-            <span class="text-xs bg-gray-300 text-white rounded-full px-2 py-1">任意</span>
-          </p>
-          <input
-            type="text"
-            name="service"
-            id=""
-            value="https://www.amazon.co.jp/mc/pipelines/cancellation?ref_=hp_csp_mm_T1"
-            class="w-full border border-gray-200 px-3 h-10 rounded-lg outline-blue-800 placeholder-gray-300"
+      </div>
+
+      <div class="w-1/2 h-screen">
+        <h3 class="text-lg font-bold mb-1">プランの選択</h3>
+        <p class="text-gray-400 text-xs mb-3">加入しているプランを選択してください</p>
+
+        <div class="flex flex-col gap-3 justify-center items-center py-14 rounded-xl" v-if="selectServiceId == 0">
+          <img :src="selectImg" alt="select image" class="w-40" />
+          <span class="text-sm text-gray-400">サービスを選択するとプランが表示されます</span>
+        </div>
+
+        <div class="flex flex-col gap-2.5 mb-8" v-if="selectServiceId !== 0">
+          <PlanRadioButton
+            :id="'plan' + p.id"
+            :label="p.plan_name"
+            name="plan"
+            :value="p.plan_name"
+            v-model="selectedPlan"
+            :isSelected="selectedPlan === p.plan_name"
+            :isLoading="false"
+            :priceText="`￥${p.price.toLocaleString()} / ${p.isMonthly ? '月' : '年'}`"
+            v-for="p in plans"
+            v-if="!isLoadingPlans"
+            :key="p.id"
           />
+          <PlanRadioButton id="" label="" name="plan" value="" :isLoading="true" v-for="n in 2" :key="n" v-if="isLoadingPlans" />
         </div>
-        <PrimaryButton :isDisabled="false" :onClick="addData">登録する</PrimaryButton>
+
+        <div v-if="selectServiceId !== 0">
+          <div class="w-48 text-sm mb-3">
+            <p class="block w-28 flex-shrink-0 text-gray-500 mb-1">利用開始日</p>
+            <input type="date" name="service" id="" :value="new Date().toISOString().split('T')[0]" class="w-full border border-gray-200 px-3 h-10 rounded-lg outline-blue-800 placeholder-gray-300" />
+          </div>
+          <div class="text-sm mb-8 h-auto">
+            <p class="flex items-center gap-1 text-gray-500 mb-1">
+              退会用URL
+              <span class="text-xs bg-gray-300 text-white rounded-full px-2 py-1">任意</span>
+            </p>
+            <input
+              type="text"
+              name="service"
+              id=""
+              value="https://www.amazon.co.jp/mc/pipelines/cancellation?ref_=hp_csp_mm_T1"
+              class="w-full border border-gray-200 px-3 h-10 rounded-lg outline-blue-800 placeholder-gray-300"
+            />
+          </div>
+          <PrimaryButton :isDisabled="false" :onClick="addData">登録する</PrimaryButton>
+        </div>
       </div>
     </section>
   </main>
