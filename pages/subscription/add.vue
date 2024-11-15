@@ -1,16 +1,16 @@
 <template>
   <main class="flex justify-center">
-    <img :src="logo" alt="" class="absolute left-5 top-5 w-32" />
+    <img :src="logo" alt="サブカン" class="absolute left-5 top-5 w-32" />
     <section class="w-1/3 p-8 h-screen">
       <div>
         <TabMenu :tabs="tabs" v-model:selectedTabId="selectedTabId" />
         <ul class="grid grid-cols-2 2xl:grid-cols-3 gap-2.5 mt-5">
           <Service
+            v-for="s in selectedServices"
             :text="s.service_name"
             :isLoading="false"
             :isSelect="selectServiceId === s.id"
             :logo="s.icon_name"
-            v-for="s in services"
             :key="s.id"
             @click="selectServiceId = s.id"
             v-if="!isLoadingServices"
@@ -82,12 +82,14 @@ const { $supabase } = useNuxtApp();
 
 const selectedPlan = ref("");
 const services = ref([]);
+const selectedServices = ref([]);
 const plans = ref([]);
 const tabs = ref([]);
 const selectedTabId = ref(0);
 const selectServiceId = ref(0);
 const isLoadingServices = ref(true);
 const isLoadingPlans = ref(true);
+const serviceCategories = ref([]); // カテゴリーごとのサービスID
 
 const fetchCategories = async () => {
   const { data, error } = await $supabase.from("categories").select("*");
@@ -112,7 +114,24 @@ const fetchServiceCategories = async () => {
   if (error) {
     console.error("サービスカテゴリの取得に失敗しました:", error);
   } else {
-    console.log(data)
+    const result = data.reduce((acc, item) => {
+      const { service_id, category_id } = item;
+
+      // service_id をキーにしたプロパティがなければ初期化
+      if (!acc[category_id]) {
+        acc[category_id] = [];
+      }
+
+      // category_id が重複しない場合にのみ追加
+      if (!acc[category_id].includes(service_id)) {
+        acc[category_id].push(service_id);
+      }
+
+      return acc;
+    }, {});
+
+    serviceCategories.value = result;
+    console.log(serviceCategories.value);
   }
 };
 
@@ -123,6 +142,9 @@ const fetchServices = async () => {
     console.error("サービスの取得に失敗しました:", error);
   } else {
     services.value = data;
+    if (selectedTabId.value === 0) {
+      selectedServices.value = services.value;
+    }
   }
   isLoadingServices.value = false;
 };
@@ -139,9 +161,28 @@ watch(selectServiceId, async (newServiceId) => {
   }
 });
 
-fetchCategories();
-fetchServiceCategories();
-fetchServices();
+watch(selectedTabId, async (newSelectedTabId) => {
+  selectedServices.value = []; // selectedTabIdが変更されたら初期化する
 
+  if (newSelectedTabId === 0) {
+    selectedServices.value = services.value;
+  } else {
+    serviceCategories.value[newSelectedTabId].map((item, i) => {
+      const getServiceById = (id) => services.value.find((service) => service.id === id);
+
+      selectedServices.value.push(getServiceById(item));
+    });
+  }
+
+  console.log(selectedServices.value);
+});
+
+onMounted(async () => {
+  await fetchServices();
+  await fetchCategories();
+  await fetchServiceCategories();
+});
+
+// (WIP)
 const addData = () => {};
 </script>
