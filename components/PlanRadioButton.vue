@@ -16,7 +16,7 @@
     >
       <p v-if="!isLoading">{{ label }}</p>
       <div class="ml-1 animate-pulse h-3 w-1/2 my-1.5 bg-gray-100 rounded" v-if="isLoading"></div>
-      
+
       <input type="radio" :name="name" :id="id" class="hidden" :value="value" @change="$emit('update:modelValue', value)" />
       <span
         class="w-5 h-5 appearance-none border border-gray-200 rounded-full flex items-center justify-center"
@@ -25,7 +25,7 @@
           'border-gray-200': !isSelected,
         }"
       >
-        <img :src="checkIcon" alt="checkIcon" class="w-5 h-5" />
+        <CheckIcon class="w-5 h-5" />
       </span>
     </div>
 
@@ -36,7 +36,7 @@
 
 <script setup>
 import { defineProps } from "vue";
-import checkIcon from "@/assets/images/check.svg";
+import CheckIcon from "~/assets/images/check.svg";
 
 const props = defineProps({
   id: String,

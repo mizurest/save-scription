@@ -1,4 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import svgLoader from 'vite-svg-loader'
+
 export default defineNuxtConfig({
   css: ["@/assets/css/tailwind.css"],
 
@@ -7,6 +9,9 @@ export default defineNuxtConfig({
       tailwindcss: {},
       autoprefixer: {},
     },
+  },
+  vite: {
+    plugins: [svgLoader()],
   },
 
   compatibilityDate: "2024-04-03",

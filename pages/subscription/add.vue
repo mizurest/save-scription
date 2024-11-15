@@ -1,11 +1,22 @@
 <template>
   <main class="flex justify-center w-full">
-    <section class="w-96 h-screen px-5 py-10 bg-white drop-shadow-lg">
-      <img :src="logo" alt="サブカン" class="w-36" />
-      <ul class="flex flex-col gap-1.5 mt-10 text-sm">
-        <li class="px-4 w-full h-12 rounded-lg flex items-center bg-blue-50 text-blue-800 font-bold">サブスクの管理</li>
-        <li class="px-4 w-full h-12 rounded-lg flex items-center hover:bg-gray-50 duration-200 cursor-pointer">分析</li>
-      </ul>
+    <section class="flex flex-col justify-between w-96 h-screen px-5 pt-10 pb-5 bg-white drop-shadow-lg">
+      <div>
+        <Logo class="w-36" />
+        <ul class="flex flex-col gap-1.5 mt-10 text-sm">
+          <li class="px-4 w-full h-12 rounded-lg flex items-center bg-blue-50 text-blue-800 font-bold">サブスクの管理</li>
+          <li class="px-4 w-full h-12 rounded-lg flex items-center hover:bg-gray-50 duration-200 cursor-pointer">分析</li>
+        </ul>
+      </div>
+      <div class="w-full rounded-lg flex items-center">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 bg-blue-600 rounded-full border-gray-200"></div>
+          <div>
+            <p class="text-sm">ログイン中</p>
+            <p class="text-xs text-gray-400">mizurest@gmail.com</p>
+          </div>
+        </div>
+      </div>
     </section>
 
     <section class="flex gap-24 w-full px-24 py-8">
@@ -23,7 +34,7 @@
               @click="selectServiceId = s.id"
               v-if="!isLoadingServices"
             />
-            <Service text="" :isLoading="true" :isSelected="false" v-if="isLoadingServices" v-for="n in 6" :key="n" />
+            <Service text="" :isLoading="true" :isSelected="false" v-if="isLoadingServices" v-for="n in 6" :key="n" logo="" />
           </ul>
         </div>
       </div>
@@ -33,7 +44,7 @@
         <p class="text-gray-400 text-xs mb-3">加入しているプランを選択してください</p>
 
         <div class="flex flex-col gap-3 justify-center items-center py-14 rounded-xl" v-if="selectServiceId == 0">
-          <img :src="selectImg" alt="select image" class="w-40" />
+          <SelectIllust class="w-40" />
           <span class="text-sm text-gray-400">サービスを選択するとプランが表示されます</span>
         </div>
 
@@ -84,8 +95,8 @@ import { useNuxtApp } from "#app";
 import { ref, onMounted } from "vue";
 
 import Service from "~/components/Service.vue";
-import selectImg from "@/assets/images/undraw_click_here_re_y6uq.svg";
-import logo from "@/assets/images/logo.svg";
+import SelectIllust from "~/assets/images/undraw_click_here_re_y6uq.svg";
+import Logo from "~/assets/images/logo.svg";
 
 const { $supabase } = useNuxtApp();
 
