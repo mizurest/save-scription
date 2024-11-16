@@ -133,7 +133,6 @@ const fetchServiceCategories = async () => {
     }, {});
 
     serviceCategories.value = result;
-    console.log(serviceCategories.value);
   }
 };
 

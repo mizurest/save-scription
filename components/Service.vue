@@ -47,13 +47,10 @@ const icons = ref({});
 const loadIcons = async () => {
   const images = import.meta.glob("@/assets/images/service-logo/*.png");
 
-  console.log(images)
-
   for (const path in images) {
     const fileName = path.split("/").pop();
     icons.value[fileName] = (await images[path]()).default;
   }
-  console.log(icons.value)
 };
 
 onMounted(async () => {
