@@ -1,26 +1,9 @@
 <template>
   <main class="flex justify-center w-full">
-    <section class="flex flex-col justify-between w-96 h-screen px-5 pt-10 pb-5 bg-white drop-shadow-lg">
-      <div>
-        <Logo class="w-36" />
-        <ul class="flex flex-col gap-1.5 mt-10 text-sm">
-          <li class="px-4 w-full h-12 rounded-lg flex items-center bg-blue-50 text-blue-800 font-bold">サブスクの管理</li>
-          <li class="px-4 w-full h-12 rounded-lg flex items-center hover:bg-gray-50 duration-200 cursor-pointer">分析</li>
-        </ul>
-      </div>
-      <div class="w-full rounded-lg flex items-center">
-        <div class="flex items-center gap-2">
-          <div class="w-8 h-8 bg-blue-600 rounded-full border-gray-200"></div>
-          <div>
-            <p class="text-sm">ログイン中</p>
-            <p class="text-xs text-gray-400">mizurest@gmail.com</p>
-          </div>
-        </div>
-      </div>
-    </section>
+    <SideNavigationBar :activeTab="0" userEmail="mizurest@gmail.com"/>
 
     <section class="flex gap-24 w-full px-24 py-8">
-      <div class="w-1/2 h-screen">
+      <div class="w-1/2">
         <div>
           <TabMenu :tabs="tabs" v-model:selectedTabId="selectedTabId" />
           <ul class="grid grid-cols-2 2xl:grid-cols-3 gap-2.5 mt-5">
@@ -39,7 +22,7 @@
         </div>
       </div>
 
-      <div class="w-1/2 h-screen">
+      <div class="w-1/2">
         <h3 class="text-lg font-bold mb-1">プランの選択</h3>
         <p class="text-gray-400 text-xs mb-3">加入しているプランを選択してください</p>
 
@@ -96,7 +79,6 @@ import { ref, onMounted } from "vue";
 
 import Service from "~/components/Service.vue";
 import SelectIllust from "~/assets/images/undraw_click_here_re_y6uq.svg";
-import Logo from "~/assets/images/logo.svg";
 
 const { $supabase } = useNuxtApp();
 
