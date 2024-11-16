@@ -26,9 +26,9 @@
         <h3 class="text-lg font-bold mb-1">プランの選択</h3>
         <p class="text-gray-400 text-xs mb-3">加入しているプランを選択してください</p>
 
-        <div class="flex flex-col gap-3 justify-center items-center py-14 rounded-xl" v-if="selectServiceId == 0">
+        <div class="flex flex-col gap-5 justify-center items-center py-14 rounded-2xl bg-slate-50 mt-8" v-if="selectServiceId == 0">
           <SelectIllust class="w-40" />
-          <span class="text-sm text-gray-400">サービスを選択するとプランが表示されます</span>
+          <span class="text-sm text-slate-400">サービスを選択するとプランが表示されます</span>
         </div>
 
         <div class="flex flex-col gap-2.5 mb-8" v-if="selectServiceId !== 0">

@@ -6,7 +6,7 @@
       'cursor-pointer hover:bg-neutral-50 duration-200': !isSelect && !isLoading,
     }"
   >
-    <component v-if="IconComponent" :is="IconComponent" class="w-5 h-5 mr-2" />
+    <img :src="icons[logo]" alt="サービスのロゴ" class="w-5 h-5 mr-2" v-if="!isLoading" />
 
     <span v-if="!isLoading" class="flex-grow truncate overflow-hidden whitespace-nowrap">
       {{ text }}
@@ -43,18 +43,17 @@ const props = defineProps({
   },
 });
 
-const svgIcons = import.meta.glob(`/assets/images/*.svg`);
-const IconComponent = ref(null);
-
+const icons = ref({});
 const loadIcons = async () => {
+  const images = import.meta.glob("@/assets/images/service-logo/*.png");
 
-  const importPath = svgIcons[`/assets/images/${props.logo}`];
-  if (importPath) {
-    const module = await importPath();
-    IconComponent.value = markRaw(module.default);
-  } else {
-    IconComponent.value = null;
+  console.log(images)
+
+  for (const path in images) {
+    const fileName = path.split("/").pop();
+    icons.value[fileName] = (await images[path]()).default;
   }
+  console.log(icons.value)
 };
 
 onMounted(async () => {
