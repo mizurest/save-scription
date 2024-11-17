@@ -8,7 +8,15 @@
       <form @submit.prevent="loginWithEmail" class="flex flex-col w-full">
         <div class="flex flex-col pb-14 gap-5">
           <div class="flex flex-col gap-4">
-            <input type="email" name="email" id="email" v-model="email" class="border border-gray-200 px-4 h-12 rounded-xl outline-blue-700 placeholder-gray-300" placeholder="Eメールアドレス" />
+            <input
+              type="email"
+              name="email"
+              id="email"
+              v-model="email"
+              class="border border-gray-200 px-4 h-12 rounded-xl outline-blue-700 placeholder-gray-300"
+              placeholder="Eメールアドレス"
+              @input="disabledCheck"
+            />
             <input
               type="password"
               name="password"
@@ -16,12 +24,10 @@
               v-model="password"
               class="border border-gray-200 px-4 h-12 rounded-xl outline-blue-700 placeholder-gray-300"
               placeholder="パスワード"
+              @input="disabledCheck"
             />
           </div>
-          <button class="flex items-center bg-blue-700 hover:bg-blue-800 duration-200 text-white h-12 rounded-xl">
-            <span class="block w-full pl-4">ログイン</span>
-            <span class="block w-4 mr-4">→</span>
-          </button>
+          <PrimaryButton :isDisabled="isButtonDisabled" :isLoading="isLoadingLogin"> ログイン </PrimaryButton>
         </div>
       </form>
 
@@ -47,8 +53,7 @@ const password = defineModel("password");
 
 const isLoadingLogin = ref(false);
 const isError = ref(false);
-const isErrorEmail = ref(false);
-const isErrorPassword = ref(false);
+const isButtonDisabled = ref(true);
 
 useHead({
   title: "ログイン - サブカン サブスクを管理するサービス",
@@ -60,6 +65,7 @@ useHead({
 });
 
 const loginWithEmail = async () => {
+  if (isButtonDisabled.value) return;
   isLoadingLogin.value = true;
   const { data, error } = await $supabase.auth.signInWithPassword({
     email: email.value,
@@ -80,6 +86,14 @@ const loginWithEmail = async () => {
 
     // ログインに成功したら画面遷移
     router.push("/subscription");
+  }
+};
+
+const disabledCheck = () => {
+  if (email.value && password.value) {
+    isButtonDisabled.value = false;
+  } else {
+    isButtonDisabled.value = true;
   }
 };
 </script>
