@@ -1,5 +1,5 @@
 <template>
-  <section class="flex flex-col justify-between w-96 h-screen px-5 pt-10 pb-5 bg-white drop-shadow-lg">
+  <section class="flex flex-col justify-between w-80 shrink-0 h-screen px-5 pt-10 pb-5 bg-white drop-shadow-lg">
     <div>
       <Logo class="w-36" />
       <div class="flex flex-col gap-1.5 mt-10 text-sm">
@@ -35,7 +35,17 @@
           <p class="text-xs text-gray-400">{{ userEmail }}</p>
         </div>
       </div>
-      <DotsIcon class="w-9 text-gray-400 p-2 rounded-full cursor-pointer duration-200 hover:bg-gray-50" />
+      <div class="relative">
+        <DotsIcon class="w-9 text-gray-400 p-2 rounded-full cursor-pointer duration-200 hover:bg-gray-50" @click="onClickDots" />
+        <div class="absolute bottom-9 left-0 pb-3" v-if="isDisplayLogout">
+          <div class="py-1.5 z-10 bg-white w-48 rounded-lg drop-shadow-md text-sm">
+            <span class="px-4 flex items-center gap-1.5 text-red-700 h-10 cursor-pointer duration-200 hover:bg-gray-50" @click="onClickLogout">
+              <ExitIcon />
+              ログアウト
+            </span>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 </template>
@@ -45,6 +55,13 @@ import Logo from "~/assets/images/logo.svg";
 import DotsIcon from "~/assets/images/dots.svg";
 import RocketIcon from "~/assets/images/rocket-lunch.svg";
 import ChartIcon from "~/assets/images/chart.svg";
+import ExitIcon from "~/assets/images/exit.svg";
+
+const { $supabase } = useNuxtApp();
+const router = useRouter();
+
+const userEmail = ref("");
+const isDisplayLogout = ref(false);
 
 const props = defineProps({
   activeTab: {
@@ -52,10 +69,35 @@ const props = defineProps({
     required: true,
     default: 0,
   },
-  userEmail: {
-    type: String,
-    required: true,
-    default: "",
-  },
+});
+
+const getSession = async () => {
+  const { data, error } = await $supabase.auth.getSession();
+
+  if (error) {
+    console.error("セッション取得エラー:", error);
+    return;
+  }
+
+  userEmail.value = data.session?.user?.email;
+};
+
+const onClickDots = () => {
+  isDisplayLogout.value = !isDisplayLogout.value;
+};
+
+const onClickLogout = async () => {
+  const { error } = await $supabase.auth.signOut();
+
+  if (error) {
+    console.error("ログアウトエラー:", error);
+    return;
+  }else{
+    router.push("/login");
+  }
+};
+
+onMounted(async () => {
+  await getSession();
 });
 </script>

@@ -64,6 +64,20 @@ useHead({
   ],
 });
 
+// 既にログイン済みの場合は自動遷移
+const checkSession = async (nextRoute) => {
+  const { data, error } = await $supabase.auth.getSession();
+
+  if (error) {
+    console.error("セッション取得エラー:", error);
+    return;
+  }
+
+  if (data.session) {
+    router.push(nextRoute);
+  }
+};
+
 const loginWithEmail = async () => {
   if (isButtonDisabled.value) return;
   isLoadingLogin.value = true;
@@ -82,8 +96,6 @@ const loginWithEmail = async () => {
 
     isLoadingLogin.value = false;
 
-    // キャッシュにログイン情報を保持
-
     // ログインに成功したら画面遷移
     router.push("/subscription");
   }
@@ -96,4 +108,8 @@ const disabledCheck = () => {
     isButtonDisabled.value = true;
   }
 };
+
+onMounted(async () => {
+  await checkSession("/subscription");
+});
 </script>

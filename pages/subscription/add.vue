@@ -1,6 +1,6 @@
 <template>
   <main class="flex justify-center w-full">
-    <SideNavigationBar :activeTab="0" userEmail="mizurest@gmail.com"/>
+    <SideNavigationBar :activeTab="0" />
 
     <section class="flex gap-24 w-full px-24 py-8">
       <div class="w-1/2">
