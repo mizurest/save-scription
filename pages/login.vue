@@ -1,21 +1,6 @@
-<script setup>
-import logo from "@/assets/images/logo.svg";
-import googleIcon from "@/assets/images/google.svg";
-import { useHead } from 'nuxt/app';
-
-useHead({
-  title: 'ログイン - サブカン サブスクを管理するサービス',
-  meta: [
-    { name: 'description', content: 'あなたは自分が加入しているサブスクを全て把握していますか？サブカンでは加入しているサブスクを可視化することで無駄な支出を抑えることができます。' },
-    { property: 'og:title', content: 'ログイン - サブカン サブスクを管理するサービス' },
-    { property: 'og:description', content: 'あなたは自分が加入しているサブスクを全て把握していますか？サブカンでは加入しているサブスクを可視化することで無駄な支出を抑えることができます。' },
-  ]
-});
-</script>
-
 <template>
   <section class="flex flex-col justify-center items-center h-svh">
-    <img :src="logo" alt="Logo" class="mb-9" />
+    <Logo class="w-48 mb-9" />
     <form action="" class="flex flex-col p-5 lg:p-0 w-full lg:w-1/4">
       <div class="flex flex-col pb-14 gap-5">
         <div class="flex flex-col gap-4">
@@ -29,8 +14,25 @@ useHead({
       </div>
 
       <button class="flex justify-center items-center gap-1.5 border border-gray-300 bg-white hover:bg-gray-50 duration-200 h-12 rounded-xl">
-        <img :src="googleIcon" alt="Google Icon" />Googleアカウントでログイン
+        <GoogleIcon />
+        Googleアカウントでログイン
       </button>
     </form>
   </section>
 </template>
+
+<script setup>
+import Logo from "~/assets/images/logo.svg";
+import googleIcon from "@/assets/images/google.svg";
+import GoogleIcon from "~/assets/images/google.svg";
+import { useHead } from "nuxt/app";
+
+useHead({
+  title: "ログイン - サブカン サブスクを管理するサービス",
+  meta: [
+    { name: "description", content: "あなたは自分が加入しているサブスクを全て把握していますか？サブカンでは加入しているサブスクを可視化することで無駄な支出を抑えることができます。" },
+    { property: "og:title", content: "ログイン - サブカン サブスクを管理するサービス" },
+    { property: "og:description", content: "あなたは自分が加入しているサブスクを全て把握していますか？サブカンでは加入しているサブスクを可視化することで無駄な支出を抑えることができます。" },
+  ],
+});
+</script>
